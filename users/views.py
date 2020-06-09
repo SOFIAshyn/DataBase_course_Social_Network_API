@@ -619,6 +619,7 @@ class AuthorGroupsListView(generics.ListAPIView):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
+
 class AuthorsListView(APIView):
     def get(self, request):
         authors = User.objects.filter(role=1)
