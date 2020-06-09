@@ -13,6 +13,18 @@ Also editors can have sales for a particular period.
 
 [Video Presentation](https://drive.google.com/drive/folders/1E943nK9W2DV0yIfF5_2_EdXRXyH11Csx?usp=sharing)
 
+## WebPage Usage
+#### Example of users to be Logged In into an application:
+```bash
+Customer:
+username: anna_petryshyn
+password: anna_pass
+
+Author:
+username: Max
+password: maxmax 
+```
+
 ## API
 
 The GitHub page shows the code of the API of the project written on Django.\
