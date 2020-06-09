@@ -8,7 +8,7 @@ User = get_user_model()
 class ShortUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('username', )
+        fields = ('id', 'username', )
 
 
 class GroupListSerializer(serializers.ModelSerializer):

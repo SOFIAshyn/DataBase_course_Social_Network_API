@@ -4,6 +4,8 @@ from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from users.serializers import UserListSerializer, CustomerSerializer, AuthorSerializer
 from accesses.serializers import AccessMessageListSerializer, AccessListSerializer
+from groups.serializers import GroupListSerializer
+from groups.models import Group
 from django.contrib.auth import get_user_model
 from accesses.models import Access
 from editors.models import Editor
@@ -90,10 +92,10 @@ class AuthorListView(APIView):
 
     def post(self, request, id=None):
         # Example of body
-        # {
-        #     "date_start": "2000-11-22",
-        #     "date_end": "2000-11-23"
-        # }
+        {
+            "date_start": "2000-11-22",
+            "date_end": "2000-11-23"
+        }
         try:
             body = json.loads(request.body)
         except:
@@ -598,3 +600,20 @@ class UserAuthorLastAccessListView(APIView):
 
         serializer = AccessListSerializer(accesses)
         return Response(serializer.data, status=200)
+
+
+class AuthorGroupsListView(generics.ListAPIView):
+    queryset = Group.objects
+    serializer_class = GroupListSerializer
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        queryset.filter(participants__exact=self.kwargs['id'])
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)

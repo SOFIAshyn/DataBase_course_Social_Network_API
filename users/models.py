@@ -23,5 +23,8 @@ class User(AbstractUser):
     def is_customer(self):
         return self.role == self.ROLE_CHOICES[0][0]
 
+    def get_groups(self):
+        return self.group
+
     def __str__(self):
         return f"{self.id}, role: {self.role}"
