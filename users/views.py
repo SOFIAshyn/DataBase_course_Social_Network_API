@@ -15,7 +15,7 @@ from collections import defaultdict, OrderedDict
 import datetime
 import monthdelta
 import pytz
-from rest_framework.permissions import IsAuthenticated
+# from rest_framework.permissions import IsAuthenticated
 
 utc=pytz.UTC
 
@@ -38,7 +38,7 @@ class CustomerListView(APIView):
     '''
     Task 1
     '''
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
 
     def post(self, request, id=None):
         # Example of body
