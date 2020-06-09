@@ -17,7 +17,6 @@ from collections import defaultdict, OrderedDict
 import datetime
 import monthdelta
 import pytz
-# from rest_framework.permissions import IsAuthenticated
 
 utc=pytz.UTC
 
