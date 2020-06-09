@@ -20,4 +20,5 @@ urlpatterns = (
     path('logged-user/', views.UserDataListView.as_view(), name='logged-in-user'),
     path('user-author-access/<customer_id>/<editor_id>/', views.UserAuthorLastAccessListView.as_view(), name='user-author-access'),
     path('author-groups/<id>/', views.AuthorGroupsListView.as_view(), name='author-groups'),
+    path('authors/', views.AuthorsListView.as_view(), name='authors'),
 )
