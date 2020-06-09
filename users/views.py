@@ -44,7 +44,7 @@ class CustomerListView(APIView):
     Task 1
     '''
 
-    def get(self, request, id=None):
+    def post(self, request, id=None):
         # Example of body
         # {
         #     "date_start": "2000-11-22",
@@ -92,7 +92,7 @@ class AuthorListView(APIView):
     Task 2
     '''
 
-    def get(self, request, id=None):
+    def post(self, request, id=None):
         # Example of body
         # {
         #     "date_start": "2000-11-22",
@@ -134,7 +134,7 @@ class AuthorOfDiffCustomersListView(APIView):
     Task 3
     '''
 
-    def get(self, request):
+    def post(self, request):
         # Example of body
         # {
         #     "date_start": "2000-06-07T15:03:09.960533Z",
@@ -188,7 +188,7 @@ class CustomerOfDiffMessagesListView(APIView):
     Task 4
     '''
 
-    def get(self, request):
+    def post(self, request):
         # Example of body
         # {
         #     "date_start": "2000-06-07T15:03:09.960533Z",
@@ -234,7 +234,7 @@ class SocialsListView(APIView):
         (3, 'Telegram')
     )
 
-    def get(self, request, id=None):
+    def post(self, request, id=None):
         # Example of body
         # {
         #     "date_start": "2000-06-07T15:03:09.960533Z",
@@ -275,7 +275,7 @@ class AuthorsSocialsListView(APIView):
     '''
     Task 6
     '''
-    def get(self, request, id=None):
+    def post(self, request, id=None):
         # Example of body
         # {
         #     "date_start": "2000-06-07T15:03:09.960533Z",
@@ -353,7 +353,7 @@ class CommonEventsListView(APIView):
     '''
     Task 8
     '''
-    def get(self, request, author_id=None, customer_id=None):
+    def post(self, request, author_id=None, customer_id=None):
         # Example of body
         # {
         #     "date_start": "2000-06-07T15:03:09.960533Z",
@@ -401,7 +401,7 @@ class AuthorGroupSizeListView(APIView):
         (3, 'Telegram')
     )
 
-    def get(self, request, id=None):
+    def post(self, request, id=None):
         # Example of body
         # {
         #     "date_start": "2000-06-07T15:03:09.960533Z",
@@ -446,7 +446,7 @@ class CustomerStyleListView(APIView):
     '''
     Task 10
     '''
-    def get(self, request, id=None):
+    def post(self, request, id=None):
         # Example of body
         # {
         #     "date_start": "2000-06-07T15:03:09.960533Z",
@@ -517,7 +517,7 @@ class ActiveNetworksListView(APIView):
     '''
     Task 12
     '''
-    def get(self, request, id=None):
+    def post(self, request, id=None):
         # Example of body
         # {
         #     "date_start": "2000-06-07T15:03:09.960533Z",
