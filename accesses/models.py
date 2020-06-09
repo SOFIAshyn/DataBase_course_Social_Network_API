@@ -15,5 +15,8 @@ class Access(models.Model):
     date_start = models.DateTimeField()
     date_end = models.DateTimeField()
 
+    def get_network_name(self):
+        return self.SOCIALS[self.social_name - 1][1]
+
     def __str__(self):
-        return f"{self.customer} to {self.editor}, from {self.date_start} to {self.date_end}"
+        return f"{self.id} to {self.editor}, from {self.date_start} to {self.date_end}"

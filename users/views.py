@@ -13,7 +13,15 @@ from networks.models import Network
 import json
 from django_filters.rest_framework import DjangoFilterBackend
 from django.http import JsonResponse
-from collections import defaultdict
+from collections import defaultdict, OrderedDict
+import datetime
+import monthdelta
+import pytz
+from django.template.defaultfilters import slugify
+from django.utils import timezone
+from django.utils.dateparse import parse_datetime
+
+utc=pytz.UTC
 
 
 User = get_user_model()
@@ -104,9 +112,7 @@ class AuthorListView(APIView):
         date_end = body["date_end"]
 
         customer = get_object_or_404(User, id=id, role=2)
-        print(customer)
         customer_accesses = Access.objects.filter(customer=customer)
-        print('customer_accesses = ', customer_accesses)
         authors_to_return = set()
         for access in customer_accesses:
             messages_count = SystemMessage.objects.filter(
@@ -118,8 +124,6 @@ class AuthorListView(APIView):
                     group_authors = User.objects.filter(group=group.id)
                     for author in group_authors:
                         authors_to_return.add(author)
-
-        print('dfgchjkl; ', authors_to_return)
 
         serializer = AuthorSerializer(authors_to_return, many=True)
         return Response(serializer.data, status=200)
@@ -387,29 +391,174 @@ class CommonEventsListView(APIView):
         return Response(access_serializer.data, status=200)
 
 
-# class AuthorGroupSize(APIView):
-#     '''
-#     Task 9
-#     '''
-#     def get(self, request, id=None):
-#         # Example of body
-#         # {
-#         #     "date_start": "2000-06-07T15:03:09.960533Z",
-#         #     "date_end": "2021-06-07T15:03:09.960533Z"
-#         # }
-#         try:
-#             body = json.loads(request.body)
-#         except:
-#             return Response(status=400)
-#         if (
-#                 "date_start" not in body
-#                 or "date_end" not in body
-#         ):
-#             return Response(status=400)
-#
-#         date_start = body["date_start"]
-#         date_end = body["date_end"]
+class AuthorGroupSizeListView(APIView):
+    '''
+    Task 9
+    '''
+    SOCIALS = (
+        (1, 'Instagram'),
+        (2, 'Facebook'),
+        (3, 'Telegram')
+    )
+
+    def get(self, request, id=None):
+        # Example of body
+        # {
+        #     "date_start": "2000-06-07T15:03:09.960533Z",
+        #     "date_end": "2021-06-07T15:03:09.960533Z",
+        #     "count_authors": 4
+        # }
+        try:
+            body = json.loads(request.body)
+        except:
+            return Response(status=400)
+        if (
+                "date_start" not in body
+                or "date_end" not in body
+                or "count_authors" not in body
+        ):
+            return Response(status=400)
+
+        date_start = body["date_start"]
+        date_end = body["date_end"]
+        count_authors = body["count_authors"]
+
+        author_messages_to_return = defaultdict()
+        author_groups = get_object_or_404(User, id=id, role=1).group
+        for group in author_groups.all():
+            if len(User.objects.filter(group=group.id)) >= count_authors:
+                group_editors = Editor.objects.filter(group=group.id)
+                for editor in group_editors:
+                    for soc_id in range(1, len(self.SOCIALS) + 1):
+                        editor_soc_accesses = Access.objects.filter(editor=editor.id, date_start__lte=date_end, \
+                                                                date_end__gte=date_start, social_name=soc_id)
+                        for access in editor_soc_accesses:
+                            messages_count = SystemMessage.objects.filter(
+                                access=access, date__range=(date_start, date_end)
+                            ).count()
+                            if messages_count:
+                                author_messages_to_return[self.SOCIALS[soc_id - 1][1]] = messages_count
+
+        return JsonResponse(author_messages_to_return)
 
 
+class CustomerStyleListView(APIView):
+    '''
+    Task 10
+    '''
+    def get(self, request, id=None):
+        # Example of body
+        # {
+        #     "date_start": "2000-06-07T15:03:09.960533Z",
+        #     "date_end": "2021-06-07T15:03:09.960533Z"
+        # }
+        try:
+            body = json.loads(request.body)
+        except:
+            return Response(status=400)
+        if (
+                "date_start" not in body
+                or "date_end" not in body
+        ):
+            return Response(status=400)
+
+        date_start = body["date_start"]
+        date_end = body["date_end"]
+
+        customer = get_object_or_404(User, id=id, role=2)
+        customer_accesses = Access.objects.filter(customer=customer, date_start__lte=date_end, \
+                                                  date_end__gte=date_start)
+        sale_orders_to_return = {}
+        for access in customer_accesses:
+            editor = get_object_or_404(Editor, id=access.editor.id)
+            if editor.sale is not None:
+                sale_start = editor.sale_started
+                sale_end = editor.sale_started.date() + datetime.timedelta(days=int(editor.sale.duration))
+                messages = SystemMessage.objects.filter(
+                    access=access, date__range=(sale_start, sale_end)
+                )
+                for message in messages:
+                    if message.style not in sale_orders_to_return.keys():
+                        sale_orders_to_return[message.get_style()] = 0
+                    sale_orders_to_return[message.get_style()] += 1
+
+        return JsonResponse(sale_orders_to_return)
 
 
+class MonthlyOrdersListView(APIView):
+    '''
+    Task 11
+    '''
+    def get(self, request):
+        # naive
+        start_date = SystemMessage.objects.latest('date').get_date()
+        end_date = datetime.datetime.now()
+
+        monthly_to_return = {}
+        all_months = 0
+        while not all_months:
+            month_end_date = start_date + monthdelta.monthdelta(1)
+            month_end_date = month_end_date.replace(tzinfo=utc)
+            end_date = end_date.replace(tzinfo=utc)
+            start_date = start_date.replace(tzinfo=utc)
+            if month_end_date > end_date:
+                month_end_date = end_date
+                all_months = 1
+            messages_count = SystemMessage.objects.filter(date__range=(start_date, month_end_date)).count()
+            if start_date.strftime('%B') not in monthly_to_return.keys():
+                monthly_to_return[start_date.strftime('%B')] = 0
+            monthly_to_return[start_date.strftime('%B')] += messages_count
+            start_date = month_end_date
+
+        return JsonResponse(monthly_to_return)
+
+
+class ActiveNetworksListView(APIView):
+    '''
+    Task 12
+    '''
+    def get(self, request, id=None):
+        # Example of body
+        # {
+        #     "date_start": "2000-06-07T15:03:09.960533Z",
+        #     "date_end": "2021-06-07T15:03:09.960533Z"
+        # }
+        try:
+            body = json.loads(request.body)
+        except:
+            return Response(status=400)
+        if (
+                "date_start" not in body
+                or "date_end" not in body
+        ):
+            return Response(status=400)
+
+        date_start = body["date_start"]
+        date_end = body["date_end"]
+
+        author_groups = get_object_or_404(User, id=id, role=1).group
+        author_net_messages = {}
+        for group in author_groups.all():
+            group_editors = Editor.objects.filter(group=group.id)
+            for editor in group_editors:
+                editor_accesses = Access.objects.filter(editor=editor.id, date_start__lte=date_end, \
+                                                  date_end__gte=date_start)
+                for access in editor_accesses:
+                    network = access.get_network_name()
+                    if network not in author_net_messages.keys():
+                        author_net_messages[network] = {}
+                    messages = SystemMessage.objects.filter(
+                        access=access, date__range=(date_start, date_end)
+                    )
+                    for message in messages:
+                        if message.get_style() not in author_net_messages[network].keys():
+                            author_net_messages[network][message.get_style()] = 0
+                        author_net_messages[network][message.get_style()] += 1
+        author_net_average = defaultdict()
+        for name, data in author_net_messages.items():
+            messages_num = 0
+            for message_data in data.values():
+                messages_num += message_data
+            if messages_num != 0:
+                author_net_average[name] = messages_num / len(author_net_messages)
+        return JsonResponse(OrderedDict(sorted(author_net_average.items(), key=lambda net_messages: net_messages[1], reverse=True)))

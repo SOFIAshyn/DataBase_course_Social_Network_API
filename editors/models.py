@@ -10,7 +10,4 @@ class Editor(models.Model):
     sale_started = models.DateTimeField(default=None)
 
     def __str__(self):
-        groups = []
-        for group in self.group.all():
-            groups.append(group.name)
-        return ", ".join(groups)
+        return f"{self.default_price}, sale from {self.sale_started}"

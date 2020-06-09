@@ -17,5 +17,14 @@ class SystemMessage(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     text = models.TextField()
 
+    def get_style(self):
+        for style_tup in self.STYLES:
+            if style_tup[0] == self.style:
+                return style_tup[1]
+
+    def get_date(self):
+        return self.date
+
+
     def __str__(self):
         return f"{self.style}: {self.text}"
