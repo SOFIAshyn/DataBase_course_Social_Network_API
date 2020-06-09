@@ -18,4 +18,5 @@ urlpatterns = (
     path('monthly/', views.MonthlyOrdersListView.as_view(), name='monthly-orders'),
     path('active-networks/<id>/', views.ActiveNetworksListView.as_view(), name='author-active-networks'),
     path('logged-user/', views.UserDataListView.as_view(), name='logged-in-user'),
+    path('user-author-access/<customer_id>/<editor_id>/', views.UserAuthorLastAccessListView.as_view(), name='user-author-access'),
 )

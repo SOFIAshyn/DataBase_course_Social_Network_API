@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from users.serializers import UserListSerializer, CustomerSerializer, AuthorSerializer
-from accesses.serializers import AccessMessageListSerializer
+from accesses.serializers import AccessMessageListSerializer, AccessListSerializer
 from django.contrib.auth import get_user_model
 from accesses.models import Access
 from editors.models import Editor
@@ -15,9 +15,9 @@ from collections import defaultdict, OrderedDict
 import datetime
 import monthdelta
 import pytz
+from rest_framework.permissions import IsAuthenticated
 
 utc=pytz.UTC
-
 
 User = get_user_model()
 
@@ -38,6 +38,7 @@ class CustomerListView(APIView):
     '''
     Task 1
     '''
+    permission_classes = (IsAuthenticated,)
 
     def post(self, request, id=None):
         # Example of body
@@ -583,3 +584,17 @@ class UserDataListView(APIView):
 
         # serializer = LoggedInUserSerializer(user)
         return Response({'id': user.id, 'e-mail': user.email, 'role': user.role}, status=200)
+
+
+class UserAuthorLastAccessListView(APIView):
+    '''
+    Task 3 from the 1 part
+    '''
+    def get(self, request, customer_id=None, editor_id=None):
+        customer = get_object_or_404(User, id=customer_id, role=2)
+        editor = get_object_or_404(User, id=editor_id, role=1)
+
+        accesses = Access.objects.filter(customer=customer.id, editor=editor.id).last()
+
+        serializer = AccessListSerializer(accesses)
+        return Response(serializer.data, status=200)
