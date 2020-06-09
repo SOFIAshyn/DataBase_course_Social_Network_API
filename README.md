@@ -14,7 +14,7 @@ Also editors can have sales for a particular period.
 
 ## API
 
-[APIARY - API details](https://sofiia.docs.apiary.io/#reference/0/users-collection)
+Here you can find all the datails API requests: [APIARY - API details](https://sofiia.docs.apiary.io/#reference/0/users-collection)
 
 ## Data base
 #### Postgesql database:
