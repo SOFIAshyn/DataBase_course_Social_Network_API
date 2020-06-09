@@ -15,3 +15,9 @@ class EditorAddSaleSerializer(WritableNestedModelSerializer):
     class Meta:
         model = Editor
         fields = ('sale', 'sale_started')
+
+
+class EditorIdSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Editor
+        fields = ('id', )

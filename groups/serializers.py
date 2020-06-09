@@ -33,3 +33,5 @@ class GroupInsertAuthorSerializer(NestedUpdateMixin, serializers.ModelSerializer
         model = Group
         fields = ('id', 'name', 'participants')
         read_only_fields = ('id', 'name')
+
+
