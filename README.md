@@ -12,6 +12,10 @@ The project aims to connect customer and editors together. Customer can choose t
 There is a groups that consist of authors and editors that consist of groups.
 Also editors can have sales for a particular period.
 
+## API
+
+[APIARY - API details](https://sofiia.docs.apiary.io/#reference/0/users-collection)
+
 ## Data base
 #### Postgesql database:
 ![alt text](https://github.com/SOFIAshyn/db_social_api/blob/master/photos/sql_data_base.jpeg?raw=true)
@@ -19,7 +23,3 @@ Also editors can have sales for a particular period.
 To implement this project we changed the database a bit. This decision was to implement it in easier way because we didn't have enough experience. So beneath you can see the Django database that we have used for this project.
 Also Django adds some additional tables.
 ![alt text](https://github.com/SOFIAshyn/db_social_api/blob/master/photos/django_data_base.jpeg?raw=true)
-
-## API
-
-[APIARY - API details](https://sofiia.docs.apiary.io/#reference/0/users-collection)
