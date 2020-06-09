@@ -5,6 +5,10 @@ The project aims to connect customer and editors together. Customer can choose t
 There is a groups that consist of authors and editors that consist of groups.
 Also editors can have sales for a particular period.
 
+## Video
+
+[Video Presentation](https://drive.google.com/drive/folders/1E943nK9W2DV0yIfF5_2_EdXRXyH11Csx?usp=sharing)
+
 ## API
 
 Here you can find all the datails API requests: [APIARY - API details](https://sofiia.docs.apiary.io/#reference/0/users-collection)
