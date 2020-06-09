@@ -25,7 +25,7 @@ SECRET_KEY = 'xe@1b5i=+wc&fx1hs3*_c%ec82fhf^5qbdwy2k6ph6vyy3pey8'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
 
 # Application definition
@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    # 'rest_framework.authtoken',
     'django_filters',
     'users',
     'groups',
@@ -46,7 +45,8 @@ INSTALLED_APPS = [
     'editors',
     'networks',
     'accesses',
-    'system_messages'
+    'system_messages',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
@@ -57,6 +57,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware'
+
 ]
 
 ROOT_URLCONF = 'db_10_1.urls'
@@ -136,10 +138,10 @@ STATIC_URL = '/static/'
 AUTH_USER_MODEL = 'users.User'
 
 REST_FRAMEWORK = {
-    # 'DEFAULT_AUTHENTICATION_CLASSES': [
-    #     'rest_framework.authentication.TokenAuthentication',
-    # ],
-    'DEFAULT_FILTER_BACKENDS': [
-        'django_filters.rest_framework.DjangoFilterBackend',
-    ]
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 }
+# CORS_ORIGIN_WHITELIST = (
+#     'http://localhost:3000'
+# )
+CORS_ORIGIN_ALLOW_ALL = True
+
