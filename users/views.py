@@ -85,6 +85,7 @@ class CustomerListView(APIView):
         return Response(serializer.data, status=200)
 
 
+
 class AuthorListView(APIView):
     '''
     Task 2
