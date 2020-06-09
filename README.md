@@ -21,3 +21,5 @@ Also Django adds some additional tables.
 ![alt text](https://github.com/SOFIAshyn/db_social_api/blob/master/photos/django_data_base.jpeg?raw=true)
 
 ## API
+
+[APIARY - API details](https://sofiia.docs.apiary.io/#reference/0/users-collection)
