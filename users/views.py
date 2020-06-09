@@ -4,7 +4,6 @@ from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from users.serializers import UserListSerializer, CustomerSerializer, AuthorSerializer
 from accesses.serializers import AccessMessageListSerializer
-from system_messages.serializers import SystemMessageListSerializer
 from django.contrib.auth import get_user_model
 from accesses.models import Access
 from editors.models import Editor
@@ -12,14 +11,10 @@ from system_messages.models import SystemMessage
 from networks.models import Network
 import json
 from django_filters.rest_framework import DjangoFilterBackend
-from django.http import JsonResponse
 from collections import defaultdict, OrderedDict
 import datetime
 import monthdelta
 import pytz
-from django.template.defaultfilters import slugify
-from django.utils import timezone
-from django.utils.dateparse import parse_datetime
 
 utc=pytz.UTC
 
@@ -31,7 +26,7 @@ class UserListView(generics.ListCreateAPIView):
     queryset = User.objects
     serializer_class = UserListSerializer
     filter_backends = [DjangoFilterBackend]
-    filter_fields = ("role",)
+    filter_fields = ("role", )
 
 
 class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -268,7 +263,7 @@ class SocialsListView(APIView):
                 if messages_count >= count_orders:
                     socials_to_return[self.SOCIALS[soc_id - 1][1]] = messages_count
 
-        return JsonResponse(socials_to_return)
+        return Response(socials_to_return, status=200)
 
 
 class AuthorsSocialsListView(APIView):
@@ -315,7 +310,7 @@ class AuthorsSocialsListView(APIView):
                         if access_network_id == 3:
                             accounts_to_return['Telegram'] = get_object_or_404(Network, id=netw).tg_username
 
-        return JsonResponse(accounts_to_return)
+        return Response(accounts_to_return, status=200)
 
 
 class AccessDeniedListView(APIView):
@@ -439,7 +434,7 @@ class AuthorGroupSizeListView(APIView):
                             if messages_count:
                                 author_messages_to_return[self.SOCIALS[soc_id - 1][1]] = messages_count
 
-        return JsonResponse(author_messages_to_return)
+        return Response(author_messages_to_return, status=200)
 
 
 class CustomerStyleListView(APIView):
@@ -482,7 +477,7 @@ class CustomerStyleListView(APIView):
                         sale_orders_to_return[message.get_style()] = 0
                     sale_orders_to_return[message.get_style()] += 1
 
-        return JsonResponse(sale_orders_to_return)
+        return Response(sale_orders_to_return, status=200)
 
 
 class MonthlyOrdersListView(APIView):
@@ -510,7 +505,7 @@ class MonthlyOrdersListView(APIView):
             monthly_to_return[start_date.strftime('%B')] += messages_count
             start_date = month_end_date
 
-        return JsonResponse(monthly_to_return)
+        return Response(monthly_to_return, status=200)
 
 
 class ActiveNetworksListView(APIView):
@@ -561,4 +556,30 @@ class ActiveNetworksListView(APIView):
                 messages_num += message_data
             if messages_num != 0:
                 author_net_average[name] = messages_num / len(author_net_messages)
-        return JsonResponse(OrderedDict(sorted(author_net_average.items(), key=lambda net_messages: net_messages[1], reverse=True)))
+        return Response(OrderedDict(sorted(author_net_average.items(), key=lambda net_messages: net_messages[1], reverse=True)), status=200)
+
+
+class UserDataListView(APIView):
+    def post(self, request):
+        # Example of body
+        # {
+        #     "username": "anna_petryshyn",
+        #     "password": "anna_pass"
+        # }
+        try:
+            body = json.loads(request.body)
+        except:
+            return Response(status=400)
+        if (
+                "username" not in body
+                or "password" not in body
+        ):
+            return Response(status=400)
+
+        username = body["username"]
+        password = body["password"]
+
+        user = get_object_or_404(User, username=username)
+
+        # serializer = LoggedInUserSerializer(user)
+        return Response({'id': user.id, 'e-mail': user.email, 'role': user.role}, status=200)

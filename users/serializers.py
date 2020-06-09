@@ -7,7 +7,7 @@ User = get_user_model()
 class UserListSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'role', 'group', 'networks')
+        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'role', 'group', 'networks', 'password')
 
 
 class CustomerSerializer(serializers.ModelSerializer):
@@ -27,3 +27,8 @@ class SocialsSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'username', 'networks')
 
+
+# class LoggedInUserSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = User
+#         fields = ('id', 'username', 'first_name', 'last_name', 'email', 'role')

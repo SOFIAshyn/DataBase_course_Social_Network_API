@@ -17,4 +17,5 @@ urlpatterns = (
     path('customer-style-messages/<id>/', views.CustomerStyleListView.as_view(), name='customer-style-messages'),
     path('monthly/', views.MonthlyOrdersListView.as_view(), name='monthly-orders'),
     path('active-networks/<id>/', views.ActiveNetworksListView.as_view(), name='author-active-networks'),
+    path('logged-user/', views.UserDataListView.as_view(), name='logged-in-user'),
 )
