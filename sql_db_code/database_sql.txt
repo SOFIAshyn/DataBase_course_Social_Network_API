@@ -1,0 +1,334 @@
+{\rtf1\ansi\ansicpg1251\cocoartf1671\cocoasubrtf600
+{\fonttbl\f0\fswiss\fcharset0 Helvetica-Bold;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\b\fs24 \cf0 \
+CREATE TABLE social_networks(\
+    id integer,\
+    name varchar(100) NOT NULL,\
+    PRIMARY KEY(id)\
+);\
+\
+CREATE TABLE accounts(\
+    id integer,\
+    network_id integer NOT NULL,\
+ username varchar(100) NOT NULL,\
+ password varchar(200) NOT NULL,\
+    PRIMARY KEY(id),\
+    FOREIGN KEY (network_id) REFERENCES social_networks (id)\
+);\
+CREATE TABLE sales(\
+    id integer,\
+    type_name varchar(100) NOT NULL,\
+    percent float NOT NULL,\
+    duration integer NOT NULL,\
+    PRIMARY KEY(id)\
+);\
+CREATE TABLE groups(\
+    id integer,\
+    name varchar(100) NOT NULL,\
+    num_participants integer NOT NULL,\
+    PRIMARY KEY(id)\
+);\
+CREATE TABLE user1(\
+    id integer,\
+    name varchar(100) NOT NULL,\
+    type bool NOT NULL,\
+    PRIMARY KEY(id)\
+);\
+CREATE TABLE group_autor(\
+ id integer,\
+ group_id integer NOT NULL,\
+ autor_id integer NOT NULL,\
+ PRIMARY KEY(id),\
+ FOREIGN KEY (group_id) REFERENCES groups (id),\
+ FOREIGN KEY (autor_id) REFERENCES user1 (id) -- only for authors\
+);\
+CREATE TABLE editor(\
+    id integer,\
+    type boolean NOT NULL,\
+    group_id integer,\
+    autor_id integer,\
+    default_price integer NOT NULL,\
+    PRIMARY KEY (id),\
+ FOREIGN KEY (group_id) REFERENCES groups (id),\
+ FOREIGN KEY (autor_id) REFERENCES user1 (id)    \
+);\
+CREATE TABLE editor_sales(\
+    id integer,\
+    editor_id integer NOT NULL,\
+    sales_id integer NOT NULL,\
+    date date NOT NULL,\
+    PRIMARY KEY(id),\
+    FOREIGN KEY (editor_id) REFERENCES editor (id),\
+    FOREIGN KEY (sales_id) REFERENCES sales (id)\
+);\
+\
+CREATE TABLE accesses(\
+    id integer,\
+    account_id integer NOT NULL,\
+    customer_id integer NOT NULL,\
+    editor_id integer NOT NULL,\
+    date_start date NOT NULL,\
+    date_end date NOT NULL,\
+    PRIMARY KEY(id),\
+    FOREIGN KEY (account_id) REFERENCES accounts (id),\
+    FOREIGN KEY (customer_id) REFERENCES user1 (id), \
+    FOREIGN KEY (editor_id) REFERENCES editor (id)\
+);\
+\
+\
+\
+\
+INSERT INTO social_networks (id, name) VALUES\
+(1, 'Instagram'),\
+(2, 'Facebook'),\
+(3, 'Telegram'),\
+(4, 'Twitter');\
+\
+INSERT INTO sales (id, type_name, percent, duration) VALUES\
+(1, 'One-day sale', 0.5, 1),\
+(2, 'One-week sale', 0.5, 7);\
+\
+INSERT INTO accounts (id, network_id, username, password) VALUES\
+(1, 1, 'wolf', 'qwerty'),\
+(2, 2, 'wolf', 'qwerty'),\
+(3, 3, 'wolf', 'qwerty'),\
+(4, 4, 'wolf', 'qwerty'),\
+(5, 1, 'fox', 'asdfg'),\
+(6, 2, 'fox', 'asdfg'),\
+(7, 3, 'fox', 'asdfg'),\
+(8, 4, 'fox', 'asdfg'),\
+(9, 1, 'elephant', 'zxcvb'),\
+(10, 2, 'elephant', 'zxcvb'),\
+(11, 3, 'elephant', 'zxcvb'),\
+(12, 4, 'elephant', 'zxcvb'),\
+(13, 1, 'frog', 'poiuy'),\
+(14, 2, 'frog', 'poiuy'),\
+(15, 3, 'frog', 'poiuy'),\
+(16, 4, 'frog', 'poiuy'),\
+(17, 1, 'cat', 'lkjhg'),\
+(18, 2, 'cat', 'lkjhg'),\
+(19, 3, 'cat', 'lkjhg'),\
+(20, 4, 'cat', 'lkjhg');\
+\
+INSERT INTO accounts (id, network_id, username, password) VALUES\
+(21, 1, 'dog', 'mnbvc'),\
+(22, 2, 'dog', 'mnbvc'),\
+(23, 3, 'dog', 'mnbvc'),\
+(24, 4, 'dog', 'mnbvc'),\
+(25, 1, 'crocodile', 'rtyui'),\
+(26, 2, 'crocodile', 'rtyui'),\
+(27, 3, 'crocodile', 'rtyui'),\
+(28, 4, 'crocodile', 'rtyui'),\
+(29, 1, 'girafe', 'fghjk'),\
+(30, 2, 'girafe', 'fghjk'),\
+(31, 3, 'girafe', 'fghjk'),\
+(32, 4, 'girafe', 'fghjk'),\
+(33, 1, 'rat', 'cvbnm'),\
+(34, 2, 'rat', 'cvbnm'),\
+(35, 3, 'rat', 'cvbnm'),\
+(36, 4, 'rat', 'cvbnm');\
+\
+INSERT INTO accounts (id, network_id, username, password) VALUES\
+(37, 1, 'parrot', 'erfvc'),\
+(38, 2, 'parrot', 'erfvc'),\
+(39, 3, 'parrot', 'erfvc'),\
+(40, 4, 'parrot', 'erfvc'),\
+(41, 1, 'dolphin', 'uyhbn'),\
+(42, 2, 'dolphin', 'uyhbn'),\
+(43, 3, 'dolphin', 'uyhbn'),\
+(44, 4, 'dolphin', 'uyhbn');\
+\
+INSERT INTO user1 (id, name, type) VALUES\
+(1, 'dmytruk123', TRUE), \
+(2, 'irynka_chocolate', TRUE),\
+(3, 'kokos99', TRUE),\
+(4, 'kitty', TRUE),\
+(5, 'lotus_solomiia', TRUE),\
+(6, 'lukas_andrii', TRUE),\
+(7, 'jojo_rabbit', TRUE),\
+(8, 'kusena_iryna', TRUE),\
+(9, 'petryshyn', TRUE),\
+(10, 'violet_rose', TRUE),\
+(11, 'ivanko1988', TRUE),\
+(12, 'lilia_konovalenko', TRUE),\
+(13, 'botsula', TRUE),\
+(14, 'alisa_baby', TRUE),\
+(15, 'sofiya_girl', TRUE),\
+(16, 'nazar', TRUE),\
+(17, 'pasternak', TRUE),\
+(18, 'dubey', FALSE),\
+(19, 'leyla321', FALSE),\
+(20, 'dianadi', FALSE),\
+(21, 'kruts_ivan', FALSE),\
+(22, 'kmet', FALSE),\
+(23, 'bear55', FALSE),\
+(24, 'liza_fedir', FALSE),\
+(25, 'little_kitty', FALSE),\
+(26, 'gold_harry', FALSE),\
+(27, 'july_k', FALSE),\
+(28, 'marmur_john', FALSE),\
+(29, 'fedir009', FALSE),\
+(30, 'marian_r', FALSE),\
+(31, 'tatosh', TRUE),\
+(32, 'petruk11', TRUE),\
+(33, 'bodnar', TRUE);\
+\
+INSERT INTO groups (id, name, num_participants) VALUES\
+(1, 'CS', 7),\
+(2, 'BA', 3),\
+(3, 'Psychology', 8),\
+(4, 'Philology', 4),\
+(5, 'History', 8);\
+\
+INSERT INTO group_autor (id, group_id, autor_id) VALUES\
+(1, 1, 1),\
+(2, 2, 1),\
+(3, 3, 1),\
+(4, 4, 1),\
+(5, 5, 1),\
+(6, 1, 2),\
+(7, 1, 3),\
+(8, 1, 4),\
+(9, 5, 4),\
+(10, 1, 5),\
+(11, 1, 6),\
+(12, 1, 7),\
+(13, 2, 8),\
+(14, 2, 2),\
+(15, 3, 3),\
+(16, 3, 11),\
+(17, 3, 14),\
+(18, 3, 15),\
+(19, 3, 7),\
+(20, 3, 6),\
+(21, 3, 31),\
+(22, 4, 33),\
+(23, 4, 32),\
+(24, 4, 6),\
+(25, 5, 3),\
+(26, 5, 13),\
+(27, 5, 15),\
+(28, 5, 14),\
+(29, 5, 11),\
+(30, 5, 12);\
+\
+INSERT INTO editor (id, type, group_id, default_price) VALUES\
+(1, FALSE, 1, 30),\
+(2, FALSE, 2, 35),\
+(3, FALSE, 3, 40),\
+(4, FALSE, 4, 45),\
+(5, FALSE, 5, 50);\
+\
+INSERT INTO editor (id, type, autor_id, default_price) VALUES\
+(6, TRUE, 1, 30),\
+(7, TRUE, 2, 35),\
+(8, TRUE, 3, 40),\
+(9, TRUE, 4, 45),\
+(10, TRUE, 5, 50),\
+(11, TRUE, 6, 55),\
+(12, TRUE, 7, 45),\
+(13, TRUE, 8, 40),\
+(14, TRUE, 9, 45),\
+(15, TRUE, 10, 60),\
+(16, TRUE, 11, 65),\
+(17, TRUE, 12, 70),\
+(18, TRUE, 13, 33),\
+(19, TRUE, 14, 56),\
+(20, TRUE, 15, 44),\
+(21, TRUE, 16, 88),\
+(22, TRUE, 17, 22),\
+(23, TRUE, 31, 45),\
+(24, TRUE, 32, 75),\
+(25, TRUE, 33, 80);\
+\
+INSERT INTO accesses (id, account_id, customer_id, editor_id, date_start, date_end) VALUES\
+(1, 44, 18, 25, '2020-04-01', '2020-04-06'),\
+(2, 12, 30, 2, '2020-02-01', '2020-02-04'),\
+(3, 22, 18, 12, '2020-04-01', '2020-04-26'),\
+(4, 3, 19, 1, '2020-04-22', '2020-04-26'),\
+(5, 6, 20, 1, '2020-04-11', '2020-04-26'),\
+(6, 8, 22, 1, '2020-04-11', '2020-04-16'),\
+(7, 44, 22, 2, '2020-03-15', '2020-04-06'),\
+(8, 9, 23, 3, '2020-05-08', '2020-05-16'),\
+(9, 28, 22, 4, '2020-02-09', '2020-02-16'),\
+(10, 22, 26, 5, '2020-01-03', '2020-02-06'),\
+(11, 7, 28, 6, '2020-06-06', '2020-06-16'),\
+(12, 8, 29, 7, '2020-06-01', '2020-06-06'),\
+(13, 3, 20, 8, '2020-05-01', '2020-05-06'),\
+(14, 27, 18, 9, '2020-06-01', '2020-06-02'),\
+(15, 18, 19, 10, '2020-04-11', '2020-04-16'),\
+(16, 11, 25, 20, '2020-02-22', '2020-04-26'),\
+(17, 22, 25, 22, '2020-02-01', '2020-04-22'),\
+(18, 33, 24, 22, '2020-03-01', '2020-04-11'),\
+(19, 37, 24, 21, '2020-04-12', '2020-04-21'),\
+(20, 36, 24, 25, '2020-04-01', '2020-04-06'),\
+(21, 34, 22, 23, '2020-04-01', '2020-04-30'),\
+(22, 22, 22, 17, '2020-02-01', '2020-04-29'),\
+(23, 21, 22, 15, '2020-04-01', '2020-04-27'),\
+(24, 6, 22, 11, '2020-04-01', '2020-04-28'),\
+(25, 29, 21, 13, '2020-04-01', '2020-04-26');\
+CREATE TABLE style(\
+  id integer,\
+  type varchar(100) NOT NULL,\
+  PRIMARY KEY(id)\
+);\
+INSERT INTO style (id, type) VALUES\
+(1, 'Assertive'),\
+(2, 'Passive-aggressive'),\
+(3, 'Aggressive'),\
+(4, 'Submissive'),\
+(5, 'Manipulative'),\
+(6, 'Romantic');\
+\
+CREATE TABLE message(\
+    id integer,\
+    style_id integer NOT NULL,\
+    date date NOT NULL,\
+    access_id integer NOT NULL,\
+    text varchar(100000) NOT NULL,\
+  	send_to varchar(100) not null,\
+    PRIMARY KEY(id),\
+    FOREIGN KEY (access_id) REFERENCES accesses (id),\
+    FOREIGN KEY (style_id) REFERENCES style (id)\
+);\
+INSERT INTO message (id, style_id, date, access_id, text, send_to) VALUES\
+(1, 1, '2020-04-03', 6, 'I love you!','napets_fed'),\
+(2, 1, '2020-04-04', 6, 'I like you!','acc2'),\
+(3, 2, '2020-02-02', 1, 'Give me a pencil!','my_acc'),\
+(4, 1, '2020-01-06', 2, 'I hate you!','irse'),\
+(5, 6, '2020-04-23', 6, 'You are gorgeous!', 'google'),\
+(6, 1, '2020-05-09', 1, 'I need your toothbrush!','hoolig'),\
+(7, 2, '2020-03-17', 3, 'Fool!','sssooofffiii'),\
+(8, 1, '2020-03-18', 3, 'Bad things happen','aaalisa'),\
+(9, 2, '2020-02-03', 1, 'I need your desk!','kiko'),\
+(10, 3, '2020-04-03', 4, 'I obey you!','123kostia'),\
+(11, 5, '2020-04-22', 6, 'I love you!','456diana'),\
+(12, 6, '2020-04-22', 3, 'I hate you!','andriiooo'),\
+(13, 6, '2020-04-03', 1, 'I love you!','celentano'),\
+(14, 6, '2020-06-02', 1, 'Give me a hug!','barbara'),\
+(15, 1, '2020-05-03', 1, 'I need your smartfone!','klara');\
+\
+INSERT INTO message (id, style_id, date, access_id, text) VALUES\
+(16, 2, '2020-03-17', 6, 'I hate you!','kokos'),\
+(17, 1, '2020-02-07', 6, 'Share me your desk','ivan'),\
+(18, 6, '2020-04-21', 8, 'Kiss me','yoyo'),\
+(19, 5, '2020-05-18', 17, 'You are so beautiful, bat your pants awful','lolsos'),\
+(20, 6, '2020-06-05', 6, 'You are the best I ever had!','ivan'),\
+(21, 3, '2020-05-10', 21, 'Hope I will never see You again!','kira'),\
+(22, 6, '2020-04-18', 3, 'You are my kitten!','los1001'),\
+(23, 2, '2020-02-15', 24, 'You are so stupid','gigi123'),\
+(24, 6, '2020-05-04', 1, 'I want to spend the rest of my life with You','kruta'),\
+(25, 3, '2020-03-29', 4, 'You have a talon!','kiks444'),\
+(26, 5, '2020-03-20', 6, 'I do not need a thing from You','kosak456'),\
+(27, 5, '2020-05-26', 3, 'I will wipe away all Your tears','puppy432'),\
+(28, 6, '2020-02-08', 20, 'I want to hug You right now','renata2002'),\
+(29, 1, '2020-05-14', 18, 'Please wash the dishes!','1998official'),\
+(30, 3, '2020-04-13', 6, 'Hope You are not ashamed about your last photo','hudi1999');\
+\
+\
+}
