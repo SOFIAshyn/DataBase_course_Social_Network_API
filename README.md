@@ -14,7 +14,7 @@ Also editors can have sales for a particular period.
 [Video Presentation](https://drive.google.com/drive/folders/1E943nK9W2DV0yIfF5_2_EdXRXyH11Csx?usp=sharing)
 
 ## WebPage Usage
-Here you can find the web-page that we have made: [WebPage Link](https://github.com/SOFIAshyn/db_social_api)
+Here you can find the web-page that we have made: [WebPage Link](https://priceless-nobel-1c7878.netlify.app/)
 #### Example of users to be Logged In into an application:
 ```bash
 Customer:
