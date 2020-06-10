@@ -11,7 +11,7 @@ Also editors can have sales for a particular period.
 
 ## Video
 
-[Video Presentation](https://drive.google.com/drive/folders/1E943nK9W2DV0yIfF5_2_EdXRXyH11Csx?usp=sharing)
+[Video Presentation](https://www.youtube.com/watch?v=MZXWhjnZxd0 )
 
 ## WebPage Usage
 Here you can find the web-page that we have made: [WebPage Link](https://priceless-nobel-1c7878.netlify.app/)
